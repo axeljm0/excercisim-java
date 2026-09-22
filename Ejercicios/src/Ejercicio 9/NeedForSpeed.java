@@ -1,49 +1,65 @@
-class JedliksToyCar {
+class NeedForSpeed {
 
-    private int distance = 0;
+    private final int speed;
+    private final int batteryDrain;
+    private int distanceDriven;
     private int battery = 100;
 
-    public static JedliksToyCar buy() {
-        return new JedliksToyCar();
+    NeedForSpeed(int speed, int batteryDrain) {
+        this.speed = speed;
+        this.batteryDrain = batteryDrain;
     }
 
-    public String distanceDisplay() {
-        return "Driven " + distance + " meters";
+    static NeedForSpeed nitro() {
+        return new NeedForSpeed(50, 4);
     }
 
-    public String batteryDisplay() {
-        if (battery == 0) {
-            return "Battery empty";
-        }
-        return "Battery at " + battery + "%";
-    }
-
-    public void drive() {
-        if (battery > 0) {
-            distance += 20;
-            battery -= 1;
+    void drive() {
+        if (!batteryDrained()) {
+            distanceDriven += speed;
+            battery -= batteryDrain;
         }
     }
 
-    public static void main(String[] args) {
-        JedliksToyCar car = JedliksToyCar.buy();
+    int distanceDriven() {
+        return distanceDriven;
+    }
 
-        System.out.println(car.distanceDisplay());
-        System.out.println(car.batteryDisplay());
+    boolean batteryDrained() {
+        return battery < batteryDrain;
+    }
+}
 
-        car.drive();
-        car.drive();
-        System.out.println(car.distanceDisplay());
-        System.out.println(car.batteryDisplay());
+class RaceTrack {
 
-        for (int i = 0; i < 100; i++) {
+    private final int distance;
+
+    RaceTrack(int distance) {
+        this.distance = distance;
+    }
+
+    boolean canFinishRace(NeedForSpeed car) {
+        while (!car.batteryDrained()) {
             car.drive();
         }
-        System.out.println(car.distanceDisplay());
-        System.out.println(car.batteryDisplay());
+        return car.distanceDriven() >= distance;
+    }
+}
 
+class Main {
+    public static void main(String[] args) {
+        NeedForSpeed car = new NeedForSpeed(5, 2);
         car.drive();
-        System.out.println(car.distanceDisplay());
-        System.out.println(car.batteryDisplay());
+        System.out.println(car.distanceDriven());
+        System.out.println(car.batteryDrained());
+
+        NeedForSpeed nitro = NeedForSpeed.nitro();
+        nitro.drive();
+        System.out.println(nitro.distanceDriven());
+
+        RaceTrack race1 = new RaceTrack(100);
+        RaceTrack race2 = new RaceTrack(300);
+        System.out.println(race1.canFinishRace(new NeedForSpeed(5, 2)));
+        System.out.println(race2.canFinishRace(new NeedForSpeed(5, 2)));
     }
 }
