@@ -26,5 +26,3 @@ Cada ejercicio incluye la solución con un método `main` para probarlo localmen
 | 15 | Cars, Assemble! | *(pendiente)* | Herencia |
 
 ---
-
-## 🗂️ Estructura del repositorio
